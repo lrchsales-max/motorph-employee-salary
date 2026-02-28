@@ -1,7 +1,7 @@
 # ForDemo
 CP1 - MS2 Source Code
 
-Employee Attendance and Basic Payroll Program
+Basic Payroll Program
 
 This program reads employee information and attendance records from CSV files, calculates the total hours worked per payroll cutoff, and displays a simple salary summary.
 
