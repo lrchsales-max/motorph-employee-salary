@@ -24,7 +24,7 @@ All deductions—SSS, PhilHealth, Pag-IBIG, and tax—are based on the employee�
 
 ## Project Plan Link
 
-[Add your project plan link here]
+[Project Plan (Google Doc)](https://docs.google.com/document/d/1TEosbn2ek39xev6Xo5ozyiKlUm8oBL6GdkAfJoELEks/edit?usp=sharing)
 
 ---
 
