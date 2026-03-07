@@ -1,8 +1,8 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * MotorPH Payroll App - MO-IT101-Group22
  */
 
-package com.demo.fordemo;
+package com.motorph.payroll;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,10 +13,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
- *
- * @author aldrinjohntamayo
+ * Basic MotorPH employee payroll: lookup, hours per cutoff, gross/net salary.
  */
-public class ForDemo {
+public class MotorPhPayrollApp {
 
     public static void main(String[] args) {
         String empFile = "resources/MotorPH_Employee Data - Employee Details.csv";

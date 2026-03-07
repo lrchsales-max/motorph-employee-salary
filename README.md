@@ -45,10 +45,10 @@ import java.util.Scanner;
 -Scanner is used to get input from the user.
 
 2. Main Class and Method
-public class ForDemo {
+public class MotorPhPayrollApp {
     public static void main(String[] args) {
 
--ForDemo is the main class.
+-MotorPhPayrollApp is the main class.
 -main method is the entry point of the program.
 
 3. File Paths and Scanner
