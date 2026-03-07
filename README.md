@@ -1,11 +1,34 @@
-# ForDemo
+# MO-IT101-Group22
 CP1 - MS2 Source Code
 
 Basic Payroll Program
 
-This program reads employee information and attendance records from CSV files, calculates the total hours worked per payroll cutoff, and displays a simple salary summary.
+## Camu Submission
 
-How the Program Works
+**Repository Name:** MO-IT101-Group22  
+**Date Added:** 3/7/2025
+
+## Program Details
+
+This system is a Java payroll application that looks up employees and summarizes their attendance and pay by cutoff. It reads employee details and attendance from CSV files in the `resources` folder, prompts for an employee number, and for that employee it computes total hours worked per payroll cutoff (1–15 and 16–end of month) for June–December 2025. Hours are calculated with an 8:10 grace period, 5:00 PM cutoff, and a 1-hour lunch deduction. The program displays the employee’s info and a salary summary per cutoff, with placeholders for gross salary, SSS, PhilHealth, Pag-IBIG, tax, and net salary.
+
+### Simple formula
+
+- **Total Hours Worked** = Time Out − Time In, with rulings/conditions applied (grace period 8:10, cutoff 17:00, 1-hour lunch deduction, cap 8 hours).
+- **Gross Salary** = Total Hours Worked × Hourly Rate.
+- **Net Salary** = Gross Salary − Total Deductions. (Deductions apply only on the **2nd cutoff**; on the 1st cutoff, Net Salary = Gross Salary.)
+
+### Deductions (team alignment)
+
+All deductions—SSS, PhilHealth, Pag-IBIG, and tax—are based on the employee’s **one month gross salary**. These deductions are applied only on the employee’s **second cutoff** (16 to end of month) each month.
+
+## Project Plan Link
+
+[Add your project plan link here]
+
+---
+
+## How the Program Works
 1. Imports
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -105,9 +128,9 @@ DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm");
 for (int month = 6; month <= 12; month++) {
     double firstHalf = 0;
     double secondHalf = 0;
-    int daysInMonth = YearMonth.of(2024, month).lengthOfMonth();
+    int daysInMonth = YearMonth.of(2025, month).lengthOfMonth();
 
--Loops from June to December 2024.
+-Loops from June to December 2025.
 -firstHalf and secondHalf store total hours for payroll cutoffs.
 -daysInMonth finds how many days are in the month.
 
@@ -130,7 +153,7 @@ int recordMonth = Integer.parseInt(dateParts[0]);
 int day = Integer.parseInt(dateParts[1]);
 int year = Integer.parseInt(dateParts[2]);
 
-if (year != 2024 || recordMonth != month) continue;
+if (year != 2025 || recordMonth != month) continue;
 
 LocalTime login = LocalTime.parse(data[4].trim(), timeFormat);
 LocalTime logout = LocalTime.parse(data[5].trim(), timeFormat);
@@ -203,5 +226,5 @@ static double computeHours(LocalTime login, LocalTime logout) {
 Notes
 -CSV files must exist in the resources folder.
 -The program currently shows placeholders for salary calculation; you can add formulas later.
--Works only for year 2024 in this version.
+-Works only for year 2025 in this version.
 -Cutoffs are 1–15 and 16–end of month.

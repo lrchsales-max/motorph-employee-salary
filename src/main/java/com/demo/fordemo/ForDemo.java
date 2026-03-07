@@ -31,6 +31,7 @@ public class ForDemo {
         String firstName = "";
         String lastName = "";
         String birthday = "";
+        double hourlyRate = 0;
         boolean found = false;
 
         // Read Employee Details CSV
@@ -49,6 +50,10 @@ public class ForDemo {
                     lastName = data[1];
                     firstName = data[2];
                     birthday = data[3];
+                    String rateStr = data[data.length - 1].trim();
+                    try {
+                        hourlyRate = Double.parseDouble(rateStr);
+                    } catch (NumberFormatException ignored) { }
                     found = true;
                     break;
                 }
@@ -74,10 +79,10 @@ public class ForDemo {
 
         // Read Attendance Records CSV
         // Nested loop: month ---> cutoff (1-15, 16-end-of-month)
-        for (int month = 6; month <= 12; month++) { // June to December 2024
+        for (int month = 6; month <= 12; month++) { // June to December 2025
             double firstHalf = 0;
             double secondHalf = 0;
-            int daysInMonth = YearMonth.of(2024, month).lengthOfMonth();
+            int daysInMonth = YearMonth.of(2025, month).lengthOfMonth();
 
             try (BufferedReader br = new BufferedReader(new FileReader(attFile))) {
 
@@ -96,7 +101,7 @@ public class ForDemo {
                     int day = Integer.parseInt(dateParts[1]);
                     int year = Integer.parseInt(dateParts[2]);
 
-                    if (year != 2024 || recordMonth != month) continue;
+                    if (year != 2025 || recordMonth != month) continue;
 
                     LocalTime login = LocalTime.parse(data[4].trim(), timeFormat);
                     LocalTime logout = LocalTime.parse(data[5].trim(), timeFormat);
@@ -124,20 +129,29 @@ public class ForDemo {
                 default -> "Month " + month;
             };
 
+            // Gross Salary = Total Hours Worked * Hourly Rate
+            double grossFirst = firstHalf * hourlyRate;
+            double grossSecond = secondHalf * hourlyRate;
+            // Deductions only on 2nd cutoff; Net = Gross - Total Deductions (placeholders for now)
+            double totalDeductions = 0; // TODO: SSS + PhilHealth + Pag-IBIG + Tax based on one-month gross
+            double netFirst = grossFirst; // No deductions on 1st cutoff
+            double netSecond = grossSecond - totalDeductions;
+
             System.out.println("\nCutoff Date: " + monthName + " 1 to 15");
             System.out.println("Total Hours Worked : " + firstHalf);
-            System.out.println("Gross Salary: ");
-            System.out.println("Net Salary: ");
+            System.out.println("Gross Salary: " + String.format("%.2f", grossFirst));
+            System.out.println("Net Salary: " + String.format("%.2f", netFirst));
 
             System.out.println("\nCutoff Date: " + monthName + " 16 to " + daysInMonth);
             System.out.println("Total Hours Worked : " + secondHalf);
-            System.out.println("Gross Salary: ");
+            System.out.println("Gross Salary: " + String.format("%.2f", grossSecond));
+            // Deductions (SSS, PhilHealth, Pag-IBIG, Tax) based on one-month gross salary; applied on second cutoff only
             System.out.println("Deductions: ");
             System.out.println("    SSS: ");
             System.out.println("    PhilHealth: ");
             System.out.println("    Pag-IBIG: ");
             System.out.println("    Tax: ");
-            System.out.println("Net Salary: ");
+            System.out.println("Net Salary: " + String.format("%.2f", netSecond));
         }
     }
 
