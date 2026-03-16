@@ -11,6 +11,8 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Basic MotorPH employee payroll: lookup, hours per cutoff, gross/net salary.
@@ -76,82 +78,73 @@ public class MotorPhPayrollApp {
 
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm");
 
-        // Read Attendance Records CSV
-        // Nested loop: month ---> cutoff (1-15, 16-end-of-month)
-        for (int month = 6; month <= 12; month++) { // June to December 2025
-            double firstHalf = 0;
-            double secondHalf = 0;
-            int daysInMonth = YearMonth.of(2025, month).lengthOfMonth();
+        // Read Attendance Records CSV (aggregate by year -> month -> cutoff)
+        Map<Integer, Map<Integer, double[]>> hoursByYearMonth = new TreeMap<>();
 
-            try (BufferedReader br = new BufferedReader(new FileReader(attFile))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(attFile))) {
+            br.readLine(); // Skip Header
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] data = line.split(",");
+                if (!data[0].equals(empNo)) continue;
 
-                br.readLine(); // Skip Header
-                String line;
+                String[] dateParts = data[3].split(\"/\");
+                int recordMonth = Integer.parseInt(dateParts[0]);
+                int day = Integer.parseInt(dateParts[1]);
+                int year = Integer.parseInt(dateParts[2]);
 
-                while ((line = br.readLine()) != null) {
-                    if (line.trim().isEmpty()) continue;
+                LocalTime login = LocalTime.parse(data[4].trim(), timeFormat);
+                LocalTime logout = LocalTime.parse(data[5].trim(), timeFormat);
+                double hours = computeHours(login, logout);
 
-                    String[] data = line.split(",");
+                hoursByYearMonth
+                    .computeIfAbsent(year, y -> new TreeMap<>())
+                    .computeIfAbsent(recordMonth, m -> new double[2]);
 
-                    if (!data[0].equals(empNo)) continue;
-
-                    String[] dateParts = data[3].split("/");
-                    int recordMonth = Integer.parseInt(dateParts[0]);
-                    int day = Integer.parseInt(dateParts[1]);
-                    int year = Integer.parseInt(dateParts[2]);
-
-                    if (year != 2025 || recordMonth != month) continue;
-
-                    LocalTime login = LocalTime.parse(data[4].trim(), timeFormat);
-                    LocalTime logout = LocalTime.parse(data[5].trim(), timeFormat);
-
-                    double hours = computeHours(login, logout);
-
-                    if (day <= 15) firstHalf += hours;
-                    else secondHalf += hours;
-                }
-
-            } catch (Exception e) {
-                System.out.println("Error reading attendance file for month " + month);
-                e.printStackTrace();
-                continue;
+                double[] cutoffs = hoursByYearMonth.get(year).get(recordMonth);
+                if (day <= 15) cutoffs[0] += hours;
+                else cutoffs[1] += hours;
             }
-
-            String monthName = switch (month) {
-                case 6 -> "June";
-                case 7 -> "July";
-                case 8 -> "August";
-                case 9 -> "September";
-                case 10 -> "October";
-                case 11 -> "November";
-                case 12 -> "December";
-                default -> "Month " + month;
-            };
-
-            // Gross Salary = Total Hours Worked * Hourly Rate
-            double grossFirst = firstHalf * hourlyRate;
-            double grossSecond = secondHalf * hourlyRate;
-            // Deductions only on 2nd cutoff; Net = Gross - Total Deductions (placeholders for now)
-            double totalDeductions = 0; // TODO: SSS + PhilHealth + Pag-IBIG + Tax based on one-month gross
-            double netFirst = grossFirst; // No deductions on 1st cutoff
-            double netSecond = grossSecond - totalDeductions;
-
-            System.out.println("\nCutoff Date: " + monthName + " 1 to 15");
-            System.out.println("Total Hours Worked : " + firstHalf);
-            System.out.println("Gross Salary: " + String.format("%.2f", grossFirst));
-            System.out.println("Net Salary: " + String.format("%.2f", netFirst));
-
-            System.out.println("\nCutoff Date: " + monthName + " 16 to " + daysInMonth);
-            System.out.println("Total Hours Worked : " + secondHalf);
-            System.out.println("Gross Salary: " + String.format("%.2f", grossSecond));
-            // Deductions (SSS, PhilHealth, Pag-IBIG, Tax) based on one-month gross salary; applied on second cutoff only
-            System.out.println("Deductions: ");
-            System.out.println("    SSS: ");
-            System.out.println("    PhilHealth: ");
-            System.out.println("    Pag-IBIG: ");
-            System.out.println("    Tax: ");
-            System.out.println("Net Salary: " + String.format("%.2f", netSecond));
+        } catch (Exception e) {
+            System.out.println(\"Error reading attendance file.\");
+            e.printStackTrace();
         }
+
+        // Display results for each year -> month found in the attendance file
+        for (Map.Entry<Integer, Map<Integer, double[]>> yearEntry : hoursByYearMonth.entrySet()) {
+            int year = yearEntry.getKey();
+            for (Map.Entry<Integer, double[]> monthEntry : yearEntry.getValue().entrySet()) {
+                int month = monthEntry.getKey();
+                double firstHalf = monthEntry.getValue()[0];
+                double secondHalf = monthEntry.getValue()[1];
+                int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
+
+                String monthName = switch (month) {
+                    case 1 -> \"January\";
+                    case 2 -> \"February\";
+                    case 3 -> \"March\";
+                    case 4 -> \"April\";
+                    case 5 -> \"May\";
+                    case 6 -> \"June\";
+                    case 7 -> \"July\";
+                    case 8 -> \"August\";
+                    case 9 -> \"September\";
+                    case 10 -> \"October\";
+                    case 11 -> \"November\";
+                    case 12 -> \"December\";
+                    default -> \"Month \" + month;
+                };
+
+                // Gross Salary = Total Hours Worked * Hourly Rate
+                double grossFirst = firstHalf * hourlyRate;
+                double grossSecond = secondHalf * hourlyRate;
+                // Deductions only on 2nd cutoff; Net = Gross - Total Deductions (placeholders for now)
+                double totalDeductions = 0; // TODO: SSS + PhilHealth + Pag-IBIG + Tax based on one-month gross
+                double netFirst = grossFirst; // No deductions on 1st cutoff
+                double netSecond = grossSecond - totalDeductions;
+
+                System.out.println(\"\\n\" + monthName + \" \" + year + \" - Cutoff Date: 1 to 15\");\n+                System.out.println(\"Total Hours Worked : \" + firstHalf);\n+                System.out.println(\"Gross Salary: \" + String.format(\"%.2f\", grossFirst));\n+                System.out.println(\"Net Salary: \" + String.format(\"%.2f\", netFirst));\n+\n+                System.out.println(\"\\n\" + monthName + \" \" + year + \" - Cutoff Date: 16 to \" + daysInMonth);\n+                System.out.println(\"Total Hours Worked : \" + secondHalf);\n+                System.out.println(\"Gross Salary: \" + String.format(\"%.2f\", grossSecond));\n+                // Deductions (SSS, PhilHealth, Pag-IBIG, Tax) based on one-month gross salary; applied on second cutoff only\n+                System.out.println(\"Deductions: \");\n+                System.out.println(\"    SSS: \");\n+                System.out.println(\"    PhilHealth: \");\n+                System.out.println(\"    Pag-IBIG: \");\n+                System.out.println(\"    Tax: \");\n+                System.out.println(\"Net Salary: \" + String.format(\"%.2f\", netSecond));\n+            }\n+        }\n*** End Patch"}
     }
 
     // Calculate Hours Worked
