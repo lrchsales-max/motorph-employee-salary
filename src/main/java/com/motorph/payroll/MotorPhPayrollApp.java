@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-// Simple student-style MotorPH payroll app
+// Simple  MotorPH payroll app
 public class MotorPhPayrollApp {
 
     public static void main(String[] args) {
