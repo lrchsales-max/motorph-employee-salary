@@ -1,3 +1,38 @@
+# MotorPH Payroll — README
+
+Quick guide to run and secure credentials.
+
+Prerequisites
+- Java 17+ (JDK 21 recommended)
+- Maven (for build & tests)
+
+Credentials
+- A hashed credentials file is required: `resources/credentials_hashed.csv`.
+- Format: CSV with header `username,password,role`. Password column uses `SHA256$<saltHex>$<hashHex>` (or bcrypt).
+- To generate a hashed file from the plaintext sample, run the helper:
+
+Windows (PowerShell):
+```
+javac -d out src/main/java/com/motorph/payroll/CredentialHashUtil.java
+java -cp out com.motorph.payroll.CredentialHashUtil
+```
+This writes `resources/credentials_hashed.csv`.
+
+- Usage
+- By default the app looks for `resources/credentials_hashed.csv`. After generating the hashed file, either rename it to that path or update the `credFile` variable in `MotorPhPayrollAppRefactored`.
+- Run tests:
+```
+mvn test
+```
+- Run the app (Maven exec or from IDE):
+```
+mvn org.codehaus.mojo:exec-maven-plugin:3.1.0:java -Dexec.mainClass="com.motorph.payroll.MotorPhPayrollAppRefactored"
+```
+
+Security notes
+- Do NOT commit plaintext credentials to source control. Use only the hashed credentials file in the repo.
+- Consider moving credentials to a secure store (env vars, vault, or DB) for production.
+
 # MO-IT101-Group22
 CP1 - MS2 Source Code
 
