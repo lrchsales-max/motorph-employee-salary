@@ -2,6 +2,10 @@
 
 Quick guide to run and secure credentials.
 
+**Project root:** work only inside this **`MotorPh/`** repository (sources, `resources/`, `pom.xml`). A parent folder may aggregate this module, but the submission app lives here.
+
+**Class rubric (summary):** `employee` sees menu + employee info only; `payroll_staff` sees Process Payroll (one / all employees) with June–December semimonthly cutoffs. Login uses usernames `employee` and `payroll_staff` with password **`12345`** (hashed in `credentials_hashed.csv`). See `MotorPhPayrollAppRefactored` for the implemented flow.
+
 Prerequisites
 - Java 17+ (JDK 21 recommended)
 - Maven (for build & tests)
@@ -13,8 +17,8 @@ Credentials
 
 Windows (PowerShell):
 ```
-javac -d out src/main/java/com/motorph/payroll/CredentialHashUtil.java
-java -cp out com.motorph.payroll.CredentialHashUtil
+javac -d out src/main/java/payroll/CredentialHashUtil.java
+java -cp out payroll.CredentialHashUtil
 ```
 This writes `resources/credentials_hashed.csv`.
 
@@ -26,7 +30,7 @@ mvn test
 ```
 - Run the app (Maven exec or from IDE):
 ```
-mvn org.codehaus.mojo:exec-maven-plugin:3.1.0:java -Dexec.mainClass="com.motorph.payroll.MotorPhPayrollAppRefactored"
+mvn org.codehaus.mojo:exec-maven-plugin:3.1.0:java -Dexec.mainClass="payroll.MotorPhPayrollAppRefactored"
 ```
 
 Security notes

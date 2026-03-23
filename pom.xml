@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- JDK 21 typical for classroom; use 23 if your team standardizes on it -->
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.motorph.payroll.MotorPhPayrollAppRefactored</exec.mainClass>
+        <exec.mainClass>payroll.MotorPhPayrollAppRefactored</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>

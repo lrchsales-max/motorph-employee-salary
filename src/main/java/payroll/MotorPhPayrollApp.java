@@ -1,4 +1,4 @@
-package com.motorph.payroll;
+package payroll;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

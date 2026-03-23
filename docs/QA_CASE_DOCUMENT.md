@@ -15,7 +15,7 @@
 | Location | Role |
 |----------|------|
 | **`ForDemo/MotorPh/`** | Intended **submission / QA root** (this document). |
-| **`ForDemo/`** (parent) | May contain a fuller Maven tree (`com.motorph.payroll.*`, refactored payroll, tests). **If your instructor grades only `MotorPh`,** ensure the same entry point and sources you want tested are **present under `MotorPh/src`** and that `pom.xml` `exec.mainClass` matches. |
+| **`ForDemo/`** (parent) | May contain a fuller Maven tree (`payroll.*`, refactored payroll, tests). **If your instructor grades only `MotorPh`,** ensure the same entry point and sources you want tested are **present under `MotorPh/src`** and that `pom.xml` `exec.mainClass` matches. |
 
 **Current `MotorPh` tree note:** `pom.xml` declares `exec.mainClass=com.demo.fordemo.ForDemo`. If `ForDemo.java` is not in `src`, use **`com.demo.fordemo.EmployeeLookup`** for smoke tests until the main class exists, or fix `exec.mainClass` in `pom.xml` to match the class you run.
 
@@ -31,7 +31,7 @@ This document defines **what** the QA team will verify, **how** to run the appli
 
 ### 2.1 In scope (when full payroll app is present under `MotorPh`)
 
-Use this matrix when the submission includes the refactored payroll entry point (e.g. `com.motorph.payroll.MotorPhPayrollAppRefactored`) and matching `pom.xml` dependencies.
+Use this matrix when the submission includes the refactored payroll entry point (e.g. `payroll.MotorPhPayrollAppRefactored`) and matching `pom.xml` dependencies.
 
 | Area | Description |
 |------|-------------|
@@ -97,7 +97,7 @@ mvn exec:java -Dexec.mainClass=com.demo.fordemo.EmployeeLookup
 **Full payroll refactored class (when present in this repo):**
 
 ```text
-mvn exec:java -Dexec.mainClass=com.motorph.payroll.MotorPhPayrollAppRefactored
+mvn exec:java -Dexec.mainClass=payroll.MotorPhPayrollAppRefactored
 ```
 
 **Logging:** If using refactored app with SLF4J, expect `[main] INFO/ERROR/...` on the console.
