@@ -38,6 +38,8 @@ CP1 - MS2 Source Code
 
 Basic Payroll Program
 
+**QA:** See [`docs/QA_CASE_DOCUMENT.md`](docs/QA_CASE_DOCUMENT.md) (use this **`MotorPh`** folder as the project root for runs).
+
 ## Camu Submission
 
 **Repository Name:** MO-IT101-Group22  
