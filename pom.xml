@@ -7,37 +7,14 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- JDK 21 typical for classroom; use 23 if your team standardizes on it -->
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>payroll.MotorPhPayrollAppRefactored</exec.mainClass>
+        <exec.mainClass>payroll.MotorPhPayrollApp</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
             <version>1.10.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mindrot</groupId>
-            <artifactId>jbcrypt</artifactId>
-            <version>0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.7</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
